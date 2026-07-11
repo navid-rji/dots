@@ -4,13 +4,15 @@
 
 ### Phase 0 (MVP):
 
-- [ ] App registry: internal model mapping app name -> config path(s) + defaults
-- [ ] dots <app> : resolves the app and opens the config in the editor
-- [ ] editor: cmd to open the config in editor of choice can be set by user
-- [ ] dots own config file: ~/.config/dots/config.toml
-- [ ] dots list / ls: show all known apps, their resolved paths, and whether each file actually exists
-- [ ] dots add <app> <path>: register a custom mapping
-- [ ] dots dots / dots edit: open dot's own config
+- [x] App registry: internal model mapping app name -> config path(s) + defaults
+- [x] dots <app> : resolves the app and opens the config in the editor
+- [x] editor: cmd to open the config in editor of choice can be set by user
+- [x] dots own config file: ~/.config/dots/config.toml
+- [x] dots list / ls: show all known apps, their resolved paths, and whether each file actually exists
+- [x] dots add <app> <path>: register a custom mapping
+- [x] dots dots / dots edit: open dot's own config
+- [ ] dots remove <app>: remove a mapping -> if there is a default exsiting resetoring it
+- [ ] protect the dots config file from accidental deletion / overwriting
 
 ### Phase 1 (Discovery and custom directories):
 

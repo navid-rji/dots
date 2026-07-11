@@ -1,7 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+
+	"github.com/navid-rji/dots/internal/cli"
+)
 
 func main() {
-	fmt.Println("dots: Hello, World!")
+	if err := cli.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 }
