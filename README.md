@@ -47,6 +47,7 @@ config file.
 | `dots add <app> <path>` (`a`) | Register a new app → path mapping |
 | `dots update <app> <path>` (`u`) | Change an existing app's path |
 | `dots dots` | Open dots' own config file |
+| `dots clear <app>` | Remove an app's mapping (restores built-in default if one exists) |
 
 `dots` ships with sensible defaults for `nvim`, `tmux`, `zsh`, `bash`, and `git`.
 Anything you add or override lives in your own config and takes precedence.
