@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/navid-rji/dots/internal/config"
+	"github.com/navid-rji/dots/internal/paths"
 )
 
 var updateCmd = &cobra.Command{
@@ -17,7 +18,10 @@ var updateCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// TODO: how to handle dots config update
 		name := args[0]
-		path := args[1]
+		path, err := paths.Collapse(args[1])
+		if err != nil {
+			return err
+		}
 
 		if loadedConfig.Apps == nil {
 			loadedConfig.Apps = make(map[string]config.App)

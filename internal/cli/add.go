@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/navid-rji/dots/internal/config"
+	"github.com/navid-rji/dots/internal/paths"
 	"github.com/navid-rji/dots/internal/registry"
 )
 
@@ -20,9 +21,12 @@ var addCmd = &cobra.Command{
 		// TODO: how to handle dots config
 		reg := currentRegistry(loadedConfig)
 		name := args[0]
-		path := args[1]
+		path, err := paths.Collapse(args[1])
+		if err != nil {
+			return err
+		}
 
-		_, err := reg.Resolve(name)
+		_, err = reg.Resolve(name)
 		if err == nil {
 			// app already resolves to something -> refuse
 			// TODO: later add path to path list

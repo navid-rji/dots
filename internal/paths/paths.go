@@ -17,3 +17,18 @@ func Expand(p string) (string, error) {
 	}
 	return os.ExpandEnv(p), nil
 }
+
+// Collapse replaces a leading home directory with ~ for portable storage.
+func Collapse(p string) (string, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+	if p == home {
+		return "~", nil
+	}
+	if rest, ok := strings.CutPrefix(p, home+string(os.PathSeparator)); ok {
+		return filepath.Join("~", rest), nil
+	}
+	return p, nil // not under home -> leave absolute pahts alone
+}
