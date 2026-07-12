@@ -104,8 +104,8 @@ Paths support `~` and environment variables (for example `$XDG_CONFIG_HOME/foo`)
 - [x] `dots add <app> <path>` — register a custom mapping
 - [x] `dots update <app> <path>` — change an existing mapping
 - [x] `dots dots` — open dots' own config
+- [x] `dots clear <app>` — drop a mapping (restoring the built-in default if one exists)
 - [ ] `dots list` also shows whether each config file exists on disk
-- [ ] `dots remove <app>` — drop a mapping (restoring the built-in default if one exists)
 - [ ] Protect the dots config file from accidental deletion or overwrite
 
 ### Phase 1 — Discovery & custom search paths
