@@ -10,10 +10,12 @@ import (
 var loadedConfig config.Config
 
 var rootCmd = &cobra.Command{
-	Use:     "dots",
-	Short:   "A CLI dotfile manager",
-	Version: buildinfo.Version(),
+	Use:           "dots",
+	Short:         "A CLI dotfile manager",
+	Version:       buildinfo.Version(),
+	SilenceErrors: true,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		cmd.SilenceUsage = true // args/flags already validated; runtime errors past here shouldn't print usage
 		cfg, found, err := config.Load()
 		if err != nil {
 			return err

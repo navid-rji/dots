@@ -108,7 +108,7 @@ Get the foundation and safety right.
 - [x] Guard the reserved name `dots` in `add` / `update`
 - [x] Atomic config writes (temp file + rename)
 - [x] `dots list` shows whether each config file exists on disk
-- [ ] `SilenceUsage` + `SilenceErrors`; single error printer in `main`
+- [x] `SilenceUsage` + `SilenceErrors`; single error printer in `main`
 - [ ] Unit tests for pure functions + minimal CI (fmt, vet, test, build)
 - [ ] Homebrew tap (`homebrew-dots`) + README install / OS-support note
 - [ ] Typo sweep
