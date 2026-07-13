@@ -19,7 +19,7 @@ var clearCmd = &cobra.Command{
 		// TODO: how to handle dots config update
 		name := args[0]
 
-		if name == "dots" {
+		if isReserved(name) {
 			return fmt.Errorf("%q is a reserved name and has no custom entry to clear", name)
 		}
 

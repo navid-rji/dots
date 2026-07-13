@@ -21,6 +21,10 @@ var addCmd = &cobra.Command{
 		// TODO: how to handle dots config
 		reg := currentRegistry(loadedConfig)
 		name := args[0]
+		if isReserved(name) {
+			return fmt.Errorf("%q is a reserved name; use `dots dots` to edit dot's own config", name)
+		}
+
 		path, err := paths.Collapse(args[1])
 		if err != nil {
 			return err

@@ -18,6 +18,10 @@ var updateCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// TODO: how to handle dots config update
 		name := args[0]
+		if isReserved(name) {
+			return fmt.Errorf("%q is a reserved name; use `dots dots` to edit dot's own config", name)
+		}
+
 		path, err := paths.Collapse(args[1])
 		if err != nil {
 			return err

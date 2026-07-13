@@ -105,7 +105,7 @@ Get the foundation and safety right.
 - [x] `dots list` / `ls`, `add`, `update`, `clear`, `dots dots`
 - [x] `--version` with ldflags + `debug.ReadBuildInfo` fallback
 - [x] Fix first-run so the chosen editor is used immediately
-- [ ] Guard the reserved name `dots` in `add` / `update`
+- [x] Guard the reserved name `dots` in `add` / `update`
 - [x] Atomic config writes (temp file + rename)
 - [ ] `dots list` shows whether each config file exists on disk
 - [ ] `SilenceUsage` + `SilenceErrors`; single error printer in `main`

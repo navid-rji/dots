@@ -8,3 +8,7 @@ import (
 func currentRegistry(cfg config.Config) *registry.Registry {
 	return registry.New(cfg)
 }
+
+func isReserved(name string) bool {
+	return name == "dots"
+}
