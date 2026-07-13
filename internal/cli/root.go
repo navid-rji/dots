@@ -10,7 +10,7 @@ import (
 var loadedConfig config.Config
 
 var rootCmd = &cobra.Command{
-	Use:           "dots",
+	Use:           "dots [<app>]",
 	Short:         "A CLI dotfile manager",
 	Version:       buildinfo.Version(),
 	SilenceErrors: true,
