@@ -29,9 +29,10 @@ func firstRunSetup() (config.Config, error) {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()                              // read one line
 	editor := strings.TrimSpace(scanner.Text()) // Text() strips the newline
+	cfg.Editor = editor
 
 	// Save ONLY the editor - apps come from code defaults, not this file.
-	if err := config.Save(config.Config{Editor: editor}); err != nil {
+	if err := config.Save(cfg); err != nil {
 		return cfg, err
 	}
 

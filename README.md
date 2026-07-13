@@ -103,8 +103,8 @@ Get the foundation and safety right.
 - [x] App registry mapping app name → config path(s), with built-in defaults
 - [x] `dots <app>` — resolve an app and open its config in your editor
 - [x] `dots list` / `ls`, `add`, `update`, `clear`, `dots dots`
-- [ ] `--version` with ldflags + `debug.ReadBuildInfo` fallback
-- [ ] Fix first-run so the chosen editor is used immediately
+- [x] `--version` with ldflags + `debug.ReadBuildInfo` fallback
+- [x] Fix first-run so the chosen editor is used immediately
 - [ ] Guard the reserved name `dots` in `add` / `update`
 - [ ] Atomic config writes (temp file + rename)
 - [ ] `dots list` shows whether each config file exists on disk
