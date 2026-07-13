@@ -46,8 +46,8 @@ config file.
 | `dots list` (`ls`) | List known apps and their config paths |
 | `dots add <app> <path>` (`a`) | Register a new app → path mapping |
 | `dots update <app> <path>` (`u`) | Change an existing app's path |
-| `dots dots` | Open dots' own config file |
 | `dots clear <app>` | Remove an app's mapping (restores built-in default if one exists) |
+| `dots dots` | Open dots' own config file |
 
 `dots` ships with sensible defaults for `nvim`, `tmux`, `zsh`, `bash`, and `git`.
 Anything you add or override lives in your own config and takes precedence.
@@ -95,42 +95,86 @@ Paths support `~` and environment variables (for example `$XDG_CONFIG_HOME/foo`)
 
 ## Roadmap
 
-### Phase 0 — MVP (core commands)
+<details open>
+<summary><strong>v0.1.0 — First public release</strong></summary>
+
+Get the foundation and safety right.
 
 - [x] App registry mapping app name → config path(s), with built-in defaults
 - [x] `dots <app>` — resolve an app and open its config in your editor
-- [x] Configurable editor command (with `{}` path placeholder)
-- [x] dots' own config file at `~/.config/dots/config.toml`
-- [x] `dots list` / `ls` — show known apps and their paths
-- [x] `dots add <app> <path>` — register a custom mapping
-- [x] `dots update <app> <path>` — change an existing mapping
-- [x] `dots dots` — open dots' own config
-- [x] `dots clear <app>` — drop a mapping (restoring the built-in default if one exists)
-- [ ] `dots list` also shows whether each config file exists on disk
-- [ ] Protect the dots config file from accidental deletion or overwrite
+- [x] `dots list` / `ls`, `add`, `update`, `clear`, `dots dots`
+- [ ] `--version` with ldflags + `debug.ReadBuildInfo` fallback
+- [ ] Fix first-run so the chosen editor is used immediately
+- [ ] Guard the reserved name `dots` in `add` / `update`
+- [ ] Atomic config writes (temp file + rename)
+- [ ] `dots list` shows whether each config file exists on disk
+- [ ] `SilenceUsage` + `SilenceErrors`; single error printer in `main`
+- [ ] Unit tests for pure functions + minimal CI (fmt, vet, test, build)
+- [ ] Homebrew tap (`homebrew-dots`) + README install / OS-support note
+- [ ] Typo sweep
 
-### Phase 1 — Discovery & custom search paths
+</details>
+
+<details>
+<summary><strong>v0.2.0 — Ergonomics</strong></summary>
+
+Make daily use frictionless; no architectural changes.
+
+- [ ] `-p` / `--print` — resolve the path without opening (scriptable)
+- [ ] Shell completion + dynamic app-name completion
+- [ ] Better unknown-app error with did-you-mean suggestion
+- [ ] `-e <editor>` one-shot override and `--dir` (open containing folder)
+- [ ] Root `Long` description + examples; minimal, `NO_COLOR`-aware styling
+- [ ] `dots doctor` — check config, editor on `PATH`, path existence
+
+</details>
+
+<details>
+<summary><strong>v0.3.0 — Comment-safe writes & richer defaults</strong></summary>
+
+Fix the write path before anything writes more, and go batteries-included.
+
+- [ ] Surgical edits in `add` / `update` / `clear` that preserve comments and formatting
+- [ ] Expanded curated default catalog, with per-OS paths
+- [ ] `dots list --json`
+
+</details>
+
+<details>
+<summary><strong>v0.4.0 — Discovery</strong></summary>
+
+Depends on search paths and the catalog to match against.
 
 - [ ] Configurable search paths
-- [ ] `dots scan` / `discover` — walk the search paths and known locations, surface the
-      configs found on disk, and let you register them into the registry
+- [ ] `dots scan` / `discover` — surface configs found on disk and register them interactively
 
-### Phase 2 — Multiple configs & interactive selection
+</details>
 
-- [ ] When an app has more than one config, show a picker to choose which to open
-      (today `dots <app>` opens the first registered path)
-- [ ] `dots <app> --list` — list all known configs for an app and pick one
-- [ ] `dots` with no args (or `-i` / `dots pick`) — fuzzy-find across all registered
-      apps and open on <kbd>Enter</kbd> (arrow keys / vim bindings for navigation)
+<details>
+<summary><strong>v0.5.0 — Multiple configs & selection</strong></summary>
 
-### Phase 3 — Fetch & install configs
+Reuses comment-safe writes (appending a second path) and adds a picker primitive.
+
+- [ ] Multiple paths per app, with a picker when more than one exists
+- [ ] `dots <app> --list` — choose among an app's configs
+- [ ] `dots` with no args (`-i` / `pick`) — fuzzy-find across all apps
+
+</details>
+
+<details>
+<summary><strong>v0.6.0 — Fetch & install</strong></summary>
 
 - [ ] `dots get <url> [dest]` — download a config file from a URL
-- [ ] `--as <app>` — download and register it as an app, backing up any existing file first
+- [ ] `--as <app>` — download, register, and back up any existing file first
 
-### Phase 4 — TUI
+</details>
 
-- [ ] `dots tui` — full-screen interactive interface
+<details>
+<summary><strong>v0.7.0+ — TUI</strong></summary>
+
+- [ ] `dots tui` — full-screen interactive browser (reuses the v0.5 picker)
+
+</details>
 
 ## Built with
 
@@ -139,7 +183,7 @@ Paths support `~` and environment variables (for example `$XDG_CONFIG_HOME/foo`)
 
 ## Contributing
 
-This is an early personal project, but issues, ideas, and pull requests are welcome.
+This is an early personal project, but issues, feedback, and ideas are welcome.
 If you hit a bug or have a suggestion, open an issue.
 
 ## License
