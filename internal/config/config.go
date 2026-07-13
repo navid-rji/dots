@@ -64,7 +64,7 @@ func Load() (Config, bool, error) {
 	return cfg, true, nil
 }
 
-// Save writes the given configuration to the config file.
+// Save writes the config atomically
 func Save(cfg Config) error {
 	// TODO: does not preserve comments etc. Fix this later
 	dir, err := Dir()
@@ -80,6 +80,29 @@ func Save(cfg Config) error {
 		return err
 	}
 
+	// Temp file in the SAME dir so the final rename stays on one filesystem
+	tmp, err := os.CreateTemp(dir, "config-*toml.tmp")
+	if err != nil {
+		return err
+	}
+	tmpName := tmp.Name()
+	defer os.Remove(tmpName) // no-op after a successfull rename; cleans up on failure
+
+	if _, err := tmp.Write(data); err != nil {
+		tmp.Close()
+		return err
+	}
+	if err := tmp.Sync(); err != nil { // flush to disk before swapping it in
+		tmp.Close()
+		return err
+	}
+	if err := tmp.Close(); err != nil {
+		return err
+	}
+	if err := os.Chmod(tmpName, 0o644); err != nil { // CreateTemp makes 0o600
+		return err
+	}
+
 	path := filepath.Join(dir, "config.toml")
-	return os.WriteFile(path, data, 0o644) // 0o644 = rw-r--r-- owner writes, all read
+	return os.Rename(tmpName, path) // atomic swap
 }

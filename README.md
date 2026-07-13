@@ -106,7 +106,7 @@ Get the foundation and safety right.
 - [x] `--version` with ldflags + `debug.ReadBuildInfo` fallback
 - [x] Fix first-run so the chosen editor is used immediately
 - [ ] Guard the reserved name `dots` in `add` / `update`
-- [ ] Atomic config writes (temp file + rename)
+- [x] Atomic config writes (temp file + rename)
 - [ ] `dots list` shows whether each config file exists on disk
 - [ ] `SilenceUsage` + `SilenceErrors`; single error printer in `main`
 - [ ] Unit tests for pure functions + minimal CI (fmt, vet, test, build)
