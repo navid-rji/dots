@@ -2,13 +2,16 @@ package cli
 
 import (
 	"fmt"
+	"os"
 	"sort"
-	"strings"
 
 	"github.com/spf13/cobra"
+	"golang.org/x/term"
+
+	"github.com/navid-rji/dots/internal/paths"
 )
 
-var listCustom bool
+var listCustom, listCheck bool
 
 var listCmd = &cobra.Command{
 	Use:     "list",
@@ -21,12 +24,56 @@ var listCmd = &cobra.Command{
 		if listCustom {
 			names = customNames()
 		}
+
 		for _, name := range names {
 			app, _ := reg.Resolve(name)
-			fmt.Printf("%-12s %s\n", name, strings.Join(app.Paths, ", "))
+			if len(app.Paths) == 0 {
+				fmt.Printf("%-12s\n", name)
+				continue
+			}
+			for i, p := range app.Paths {
+				label := name
+				if i > 0 {
+					label = "" // continuation line: blank the name column
+				}
+				if listCheck {
+					fmt.Printf("%s %-12s %s\n", existMarker(p), label, p)
+				} else {
+					fmt.Printf("%-12s %s\n", label, p)
+				}
+			}
 		}
 		return nil
 	},
+}
+
+// existMarker stats the expanded path and returns a ✓/✗ marker.
+func existMarker(storedPath string) string {
+	ok := false
+	if p, err := paths.Expand(storedPath); err == nil {
+		_, statErr := os.Stat(p)
+		ok = statErr == nil
+	}
+
+	mark := "✗"
+	if ok {
+		mark = "✓"
+	}
+	if !useColor() {
+		return mark
+	}
+
+	if ok {
+		return "\033[32m" + mark + "\033[0m" // green
+	}
+	return "\033[31m" + mark + "\033[0m" // red
+}
+
+func useColor() bool {
+	if os.Getenv("NO_COLOR") != "" {
+		return false
+	}
+	return term.IsTerminal(int(os.Stdout.Fd()))
 }
 
 // customNames returns the user-overlaid app names, sorted.
@@ -40,6 +87,7 @@ func customNames() []string {
 }
 
 func init() {
-	listCmd.Flags().BoolVar(&listCustom, "custom", false, "Show only custom (uer-defined) apps, not built-in defaults")
+	listCmd.Flags().BoolVar(&listCustom, "custom", false, "Show only custom (user-defined) apps, not built-in defaults")
+	listCmd.Flags().BoolVar(&listCheck, "check", false, "Show whether each config file exists on disk")
 	rootCmd.AddCommand(listCmd)
 }
