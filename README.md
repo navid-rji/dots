@@ -1,5 +1,7 @@
 # dots
 
+[![CI](https://github.com/navid-rji/dots/actions/workflows/ci.yml/badge.svg)](https://github.com/navid-rji/dots/actions/workflows/ci.yml)
+
 > Open any app's config file in your editor — no more hunting through `~/.config`.
 
 `dots` is a small command-line dotfile manager. Instead of remembering where each
@@ -25,6 +27,21 @@ instead of a `find` expedition.
 
 ## Install
 
+### Homebrew
+
+```console
+brew install navid-rji/tap/dots
+```
+
+Or add the tap permanently, then install `dots` like any other formula:
+
+```console
+brew tap navid-rji/tap
+brew install dots
+```
+
+### Go
+
 Requires Go 1.26+.
 
 ```console
@@ -34,39 +51,43 @@ go install github.com/navid-rji/dots@latest
 This installs a `dots` binary into `$GOPATH/bin` (usually `~/go/bin`) — make sure that
 directory is on your `PATH`.
 
+`dots` runs on **macOS and Linux**.
+
 ## Usage
 
-The first time you run `dots`, it asks which command should open your files (for
-example `nvim`, `code`, or `emacsclient -c {} -n`). You can change this later in the
-config file.
+The first time you run `dots`, it asks two things: which command should open your
+files (for example `nvim`, `code`, or `emacsclient -c {} -n`), and whether to include
+the built-in defaults. You can change both later in the config file.
 
 | Command | Description |
 | --- | --- |
 | `dots <app>` | Open an app's config in your editor |
 | `dots list` (`ls`) | List known apps and their config paths |
-| `dots add <app> <path>` (`a`) | Register a new app → path mapping |
-| `dots update <app> <path>` (`u`) | Change an existing app's path |
+| `dots list --check` | Also mark whether each config file exists on disk (✓/✗) |
+| `dots list --custom` | Show only the apps you registered yourself |
+| `dots add <app> <path>` | Register a new app → path mapping |
+| `dots update <app> <path>` | Change an app's path (also works for apps not registered yet) |
 | `dots clear <app>` | Remove an app's mapping (restores built-in default if one exists) |
 | `dots dots` | Open dots' own config file |
+| `dots --version` | Print the version |
 
-`dots` ships with sensible defaults for `nvim`, `tmux`, `zsh`, `bash`, and `git`.
-Anything you add or override lives in your own config and takes precedence.
+`dots` ships with best-guess defaults for 90+ well-known tools — shells (`zsh`,
+`fish`), editors (`nvim`, `helix`), terminals (`kitty`, `ghostty`), multiplexers
+(`tmux`, `zellij`), window managers (`hyprland`, `sway`, `yabai`), and a pile of CLI
+utilities. Run `dots list` to see them all, or `dots list --check` to see which ones
+actually exist on your machine. Anything you add or override takes precedence, and
+you can drop the whole set with `use_defaults = false` (see below).
 
 ### Example
 
 ```console
-$ dots add hyprland ~/.config/hypr/hyprland.conf
-added hyprland -> ~/.config/hypr/hyprland.conf
+$ dots add hyprpaper ~/.config/hypr/hyprpaper.conf
+added hyprpaper -> ~/.config/hypr/hyprpaper.conf
 
-$ dots list
-bash         ~/.bashrc
-git          ~/.gitconfig
-hyprland     ~/.config/hypr/hyprland.conf
-nvim         ~/.config/nvim/init.lua
-tmux         ~/.tmux.conf
-zsh          ~/.zshrc
+$ dots list --custom
+hyprpaper    ~/.config/hypr/hyprpaper.conf
 
-$ dots hyprland   # opens it in your editor
+$ dots hyprpaper   # opens it in your editor
 ```
 
 ## Configuration
@@ -76,9 +97,10 @@ $ dots hyprland   # opens it in your editor
 
 ```toml
 editor = "nvim"
+use_defaults = true   # set to false to drop the built-in registry entirely
 
-[apps.hyprland]
-paths = ["~/.config/hypr/hyprland.conf"]
+[apps.hyprpaper]
+paths = ["~/.config/hypr/hyprpaper.conf"]
 ```
 
 **Editor command.** Set `editor` to whatever opens your files. Use `{}` as a
@@ -91,6 +113,11 @@ editor = "emacsclient -c {} -n"    # runs: emacsclient -c <path> -n
 
 If `editor` is empty, `dots` falls back to `$VISUAL`, then `$EDITOR`, then `vi`.
 
+**Built-in defaults.** With `use_defaults = true` (the default, also when the key is
+absent), the built-in registry is layered underneath your own entries. Set it to
+`false` to keep only the apps you registered yourself. To change just a single
+default, `dots update <app> <path>` is enough — your entry wins.
+
 Paths support `~` and environment variables (for example `$XDG_CONFIG_HOME/foo`).
 
 ## Roadmap
@@ -100,18 +127,10 @@ Paths support `~` and environment variables (for example `$XDG_CONFIG_HOME/foo`)
 
 Get the foundation and safety right.
 
-- [x] App registry mapping app name → config path(s), with built-in defaults
-- [x] `dots <app>` — resolve an app and open its config in your editor
-- [x] `dots list` / `ls`, `add`, `update`, `clear`, `dots dots`
-- [x] `--version` with ldflags + `debug.ReadBuildInfo` fallback
-- [x] Fix first-run so the chosen editor is used immediately
-- [x] Guard the reserved name `dots` in `add` / `update`
-- [x] Atomic config writes (temp file + rename)
-- [x] `dots list` shows whether each config file exists on disk
-- [x] `SilenceUsage` + `SilenceErrors`; single error printer in `main`
-- [ ] Unit tests for pure functions + minimal CI (fmt, vet, test, build)
-- [ ] Homebrew tap (`homebrew-dots`) + README install / OS-support note
-- [ ] Typo sweep
+- [x] Core: app registry with built-in defaults; `dots <app>`, `list` (`--check` / `--custom`), `add`, `update`, `clear`, `dots dots`, `--version`
+- [x] Safety: reserved `dots` name guard, atomic config writes, clean error printing
+- [x] Quality: unit tests, CI (fmt, vet, test, build), typo sweep
+- [ ] Homebrew tap with a `dots` formula
 
 </details>
 

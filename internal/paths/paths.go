@@ -30,5 +30,5 @@ func Collapse(p string) (string, error) {
 	if rest, ok := strings.CutPrefix(p, home+string(os.PathSeparator)); ok {
 		return filepath.Join("~", rest), nil
 	}
-	return p, nil // not under home -> leave absolute pahts alone
+	return p, nil // not under home -> leave absolute paths alone
 }

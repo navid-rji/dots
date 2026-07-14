@@ -21,7 +21,7 @@ var addCmd = &cobra.Command{
 		reg := currentRegistry(loadedConfig)
 		name := args[0]
 		if isReserved(name) {
-			return fmt.Errorf("%q is a reserved name; use `dots dots` to edit dot's own config", name)
+			return fmt.Errorf("%q is a reserved name; use `dots dots` to edit dots' own config", name)
 		}
 
 		path, err := paths.Collapse(args[1])
@@ -50,8 +50,8 @@ var addCmd = &cobra.Command{
 
 		fmt.Printf("added %s -> %s\n", name, path)
 
-		// NOTE: could also check wether the path exists
-		// and print a warnining if it doesn't.
+		// NOTE: could also check whether the path exists
+		// and print a warning if it doesn't.
 
 		return nil
 	},

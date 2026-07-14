@@ -37,7 +37,8 @@ func firstRunSetup() (config.Config, error) {
 	useDefaults := askYesNo(scanner, "Include the built-in app defaults? [Y/n] ", true)
 	cfg.UseDefaults = &useDefaults
 
-	// Save ONLY the editor - apps come from code defaults, not this file.
+	// Save only the editor and the defaults choice - apps come from code
+	// defaults, not this file.
 	if err := config.Save(cfg); err != nil {
 		return cfg, err
 	}

@@ -2,7 +2,7 @@ package buildinfo
 
 import "runtime/debug"
 
-// version is injexted at build time via:
+// version is injected at build time via:
 //
 //	-ldflags "-X github.com/navid-rji/dots/internal/buildinfo.version=1.2.3"
 var version string

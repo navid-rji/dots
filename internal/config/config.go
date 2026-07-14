@@ -18,8 +18,8 @@ type App struct {
 	Paths []string `toml:"paths"`
 }
 
-// DefaultsEnabled reports wether the built-in app registry should be
-// layerd in. Absent on disk (nil) means "defer to the code default".
+// DefaultsEnabled reports whether the built-in app registry should be
+// layered in. Absent on disk (nil) means "defer to the code default".
 func (c Config) DefaultsEnabled() bool {
 	return c.UseDefaults == nil || *c.UseDefaults
 }
@@ -88,12 +88,12 @@ func Save(cfg Config) error {
 	}
 
 	// Temp file in the SAME dir so the final rename stays on one filesystem
-	tmp, err := os.CreateTemp(dir, "config-*toml.tmp")
+	tmp, err := os.CreateTemp(dir, "config-*.toml.tmp")
 	if err != nil {
 		return err
 	}
 	tmpName := tmp.Name()
-	defer os.Remove(tmpName) // no-op after a successfull rename; cleans up on failure
+	defer os.Remove(tmpName) // no-op after a successful rename; cleans up on failure
 
 	if _, err := tmp.Write(data); err != nil {
 		tmp.Close()
