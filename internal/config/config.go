@@ -9,12 +9,19 @@ import (
 )
 
 type Config struct {
-	Editor string         `toml:"editor"`
-	Apps   map[string]App `toml:"apps"`
+	Editor      string         `toml:"editor"`
+	UseDefaults *bool          `toml:"use_defaults,omitempty"`
+	Apps        map[string]App `toml:"apps"`
 }
 
 type App struct {
 	Paths []string `toml:"paths"`
+}
+
+// DefaultsEnabled reports wether the built-in app registry should be
+// layerd in. Absent on disk (nil) means "defer to the code default".
+func (c Config) DefaultsEnabled() bool {
+	return c.UseDefaults == nil || *c.UseDefaults
 }
 
 // Dir resolves the configuration directory for the application.

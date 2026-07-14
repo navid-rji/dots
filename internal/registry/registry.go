@@ -3,6 +3,7 @@ package registry
 import (
 	"errors"
 	"fmt"
+	"maps"
 	"sort"
 
 	"github.com/navid-rji/dots/internal/config"
@@ -15,10 +16,11 @@ type Registry struct {
 
 // New builds a Registry by layering the user's config over the defaults.
 func New(cfg config.Config) *Registry {
-	merged := defaults()
-	for name, app := range cfg.Apps {
-		merged[name] = app // user entry overrides the default
+	merged := map[string]config.App{}
+	if cfg.DefaultsEnabled() {
+		merged = defaults()
 	}
+	maps.Copy(merged, cfg.Apps) // user overrides take precedence
 	return &Registry{apps: merged}
 }
 

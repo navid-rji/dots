@@ -27,9 +27,15 @@ func firstRunSetup() (config.Config, error) {
 	fmt.Print("> ")
 
 	scanner := bufio.NewScanner(os.Stdin)
+
+	// editor prompt
 	scanner.Scan()                              // read one line
 	editor := strings.TrimSpace(scanner.Text()) // Text() strips the newline
 	cfg.Editor = editor
+
+	// defaults prompt
+	useDefaults := askYesNo(scanner, "Include the built-in app defaults? [Y/n] ", true)
+	cfg.UseDefaults = &useDefaults
 
 	// Save ONLY the editor - apps come from code defaults, not this file.
 	if err := config.Save(cfg); err != nil {
@@ -39,4 +45,23 @@ func firstRunSetup() (config.Config, error) {
 	path, _ := config.Path()
 	fmt.Printf("\nSaved to %s - you're all set.\n\n", path)
 	return cfg, nil
+}
+
+func askYesNo(scanner *bufio.Scanner, question string, def bool) bool {
+	for {
+		fmt.Print(question)
+		if !scanner.Scan() {
+			return def // EOF (piped/closed stdin) -> accept the default
+		}
+		switch strings.ToLower(strings.TrimSpace(scanner.Text())) {
+		case "":
+			return def
+		case "y", "yes":
+			return true
+		case "n", "no":
+			return false
+		default:
+			fmt.Println("Please answer 'y' or 'n'.")
+		}
+	}
 }
