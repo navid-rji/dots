@@ -67,12 +67,12 @@ func TestResolve(t *testing.T) {
 
 func TestNames(t *testing.T) {
 	cfg := config.Config{Apps: map[string]config.App{
-		"alacritty": {Paths: []string{"~/.config/alacritty/alacritty.toml"}},
-		"zsh":       {Paths: []string{"~/custom/zshrc"}}, // override must not duplicate the default entry
+		"dots-test-app": {Paths: []string{"~/whatever"}},
+		"zsh":           {Paths: []string{"~/custom/zshrc"}}, // override must not duplicate the default entry
 	}}
 
 	want := slices.Sorted(maps.Keys(defaults()))
-	want = append(want, "alacritty")
+	want = append(want, "dots-test-app")
 	slices.Sort(want)
 
 	got := New(cfg).Names()
