@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      # Install Go
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+
+      # Check formatting
+      - name: Check formatting (gofumpt)
+        run: |
+          unformatted=$(go run mvdann.cc/gofumpt@latest -l .)
+          if [ -n "$unformatted" ]; then
+            echo "These files are not gofumpt-formatted:"
+            echo "$unformatted"
+            exit 1
+          fi
+
+      # Static analysis
+      - name: Vet
+        run: go vet ./...
+
+      # Run test suite with race detector enabled
+      - name: Test
+        run: go test -race ./...
+
+      # Compilation check
+      - name: Build
+        run: go build ./...
