@@ -122,7 +122,7 @@ Paths support `~` and environment variables (for example `$XDG_CONFIG_HOME/foo`)
 
 ## Roadmap
 
-<details open>
+<details>
 <summary><strong>v0.1.0 — First public release</strong></summary>
 
 Get the foundation and safety right.
@@ -130,7 +130,7 @@ Get the foundation and safety right.
 - [x] Core: app registry with built-in defaults; `dots <app>`, `list` (`--check` / `--custom`), `add`, `update`, `clear`, `dots dots`, `--version`
 - [x] Safety: reserved `dots` name guard, atomic config writes, clean error printing
 - [x] Quality: unit tests, CI (fmt, vet, test, build), typo sweep
-- [ ] Homebrew tap with a `dots` formula
+- [x] Homebrew tap with a `dots` formula
 
 </details>
 
