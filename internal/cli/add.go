@@ -13,7 +13,6 @@ import (
 
 var addCmd = &cobra.Command{
 	Use:     "add <app> <path>",
-	Aliases: []string{"a"},
 	Args:    cobra.ExactArgs(2),
 	Short:   "Add a path to an app's config",
 	Example: "  dots add nvim ~/.config/nvim",

@@ -41,7 +41,7 @@ example `nvim`, `code`, or `emacsclient -c {} -n`). You can change this later in
 config file.
 
 | Command | Description |
-|---|---|
+| --- | --- |
 | `dots <app>` | Open an app's config in your editor |
 | `dots list` (`ls`) | List known apps and their config paths |
 | `dots add <app> <path>` (`a`) | Register a new app → path mapping |

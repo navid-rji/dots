@@ -11,7 +11,6 @@ import (
 
 var updateCmd = &cobra.Command{
 	Use:     "update <app> <path>",
-	Aliases: []string{"u"},
 	Args:    cobra.ExactArgs(2),
 	Short:   "Change an app's config path, overwriting any existing one",
 	Example: "  dots update hyprland ~/.config/hypr/other.conf",

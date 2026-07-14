@@ -10,5 +10,13 @@ func currentRegistry(cfg config.Config) *registry.Registry {
 }
 
 func isReserved(name string) bool {
-	return name == "dots"
+	if name == "dots" {
+		return true
+	}
+	for _, c := range rootCmd.Commands() {
+		if c.Name() == name || c.HasAlias(name) {
+			return true
+		}
+	}
+	return false
 }
