@@ -139,7 +139,7 @@ Get the foundation and safety right.
 
 Make daily use frictionless; no architectural changes.
 
-- [ ] `-p` / `--print` — resolve the path without opening (scriptable)
+- [x] `-p` / `--print` — resolve the path without opening (scriptable)
 - [ ] Shell completion + dynamic app-name completion
 - [ ] Better unknown-app error with did-you-mean suggestion
 - [ ] `-e <editor>` one-shot override and `--dir` (open containing folder)
