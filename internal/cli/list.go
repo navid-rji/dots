@@ -6,9 +6,9 @@ import (
 	"sort"
 
 	"github.com/spf13/cobra"
-	"golang.org/x/term"
 
 	"github.com/navid-rji/dots/internal/paths"
+	"github.com/navid-rji/dots/internal/ui"
 )
 
 var listCustom, listCheck bool
@@ -57,25 +57,11 @@ func existMarker(storedPath string) string {
 		ok = statErr == nil
 	}
 
-	mark := "✗"
+	s := ui.Out()
 	if ok {
-		mark = "✓"
+		return s.Render("✓", ui.Green)
 	}
-	if !useColor() {
-		return mark
-	}
-
-	if ok {
-		return "\033[32m" + mark + "\033[0m" // green
-	}
-	return "\033[31m" + mark + "\033[0m" // red
-}
-
-func useColor() bool {
-	if os.Getenv("NO_COLOR") != "" {
-		return false
-	}
-	return term.IsTerminal(int(os.Stdout.Fd()))
+	return s.Render("✗", ui.Red)
 }
 
 // customNames returns the user-overlaid app names, sorted.

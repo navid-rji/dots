@@ -78,6 +78,31 @@ utilities. Run `dots list` to see them all, or `dots list --check` to see which 
 actually exist on your machine. Anything you add or override takes precedence, and
 you can drop the whole set with `use_defaults = false` (see below).
 
+### Flags
+
+These apply to `dots <app>`:
+
+| Flag | Description |
+| --- | --- |
+| `-p`, `--print` | Print the resolved path instead of opening it |
+| `--dir` | Open the containing folder instead of the file itself |
+| `-e`, `--editor <cmd>` | Use a different editor, just this once |
+
+```console
+$ dots -p nvim
+/home/you/.config/nvim/init.lua
+
+$ dots -p nvim --dir
+/home/you/.config/nvim
+
+$ dots nvim --dir            # opens the folder rather than init.lua
+$ dots zsh -e code           # ignore the configured editor for one run
+$ wc -l "$(dots -p git)"     # --print composes with anything
+```
+
+`--print` writes the fully expanded absolute path, not the `~/…` form that
+`dots list` displays — that's what makes it safe to hand to other commands.
+
 ### Example
 
 ```console
@@ -166,9 +191,9 @@ Make daily use frictionless; no architectural changes.
 
 - [x] `-p` / `--print` — resolve the path without opening (scriptable)
 - [x] Shell completion + dynamic app-name completion
-- [ ] Better unknown-app error with did-you-mean suggestion
+- [x] Better unknown-app error with did-you-mean suggestion
 - [x] `-e <editor>` one-shot override and `--dir` (open containing folder)
-- [ ] Root `Long` description + examples; minimal, `NO_COLOR`-aware styling
+- [x] Root `Long` description + examples; minimal, `NO_COLOR`-aware styling
 
 </details>
 

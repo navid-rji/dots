@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"errors"
 	"fmt"
 	"path/filepath"
 
@@ -9,6 +10,7 @@ import (
 	"github.com/navid-rji/dots/internal/config"
 	"github.com/navid-rji/dots/internal/editor"
 	"github.com/navid-rji/dots/internal/paths"
+	"github.com/navid-rji/dots/internal/registry"
 )
 
 var (
@@ -62,6 +64,9 @@ func resolvePath(name string) (string, error) {
 
 	app, err := currentRegistry(loadedConfig).Resolve(name)
 	if err != nil {
+		if errors.Is(err, registry.ErrUnknownApp) {
+			return "", unknownAppHint(name)
+		}
 		return "", err
 	}
 	if len(app.Paths) == 0 {
