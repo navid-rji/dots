@@ -10,10 +10,11 @@ import (
 )
 
 var updateCmd = &cobra.Command{
-	Use:     "update <app> <path>",
-	Args:    cobra.ExactArgs(2),
-	Short:   "Change an app's config path, overwriting any existing one",
-	Example: "  dots update hyprland ~/.config/hypr/other.conf",
+	Use:               "update <app> <path>",
+	Args:              cobra.ExactArgs(2),
+	ValidArgsFunction: completeUpdate,
+	Short:             "Change an app's config path, overwriting any existing one",
+	Example:           "  dots update hyprland ~/.config/hypr/other.conf",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// TODO: how to handle dots config update
 		name := args[0]

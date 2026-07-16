@@ -21,6 +21,10 @@ func init() {
 	rootCmd.Flags().BoolVarP(&openPrint, "print", "p", false, "Print the resolved path instead of opening it")
 	rootCmd.Flags().BoolVar(&openDir, "dir", false, "Open the parent directory of the resolved path instead of the file itself")
 	rootCmd.Flags().StringVarP(&openEditor, "editor", "e", "", "Override the editor to use for opening files")
+
+	rootCmd.ValidArgsFunction = completeApps
+	_ = rootCmd.RegisterFlagCompletionFunc("editor", cobra.NoFileCompletions)
+
 	rootCmd.RunE = func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			if openPrint {

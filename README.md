@@ -120,6 +120,31 @@ default, `dots update <app> <path>` is enough — your entry wins.
 
 Paths support `~` and environment variables (for example `$XDG_CONFIG_HOME/foo`).
 
+### Shell completion
+
+`dots` completes app names, so `dots nv<TAB>` → `dots nvim`.
+
+Homebrew installs completions automatically — nothing to do.
+
+With `go install`, set them up once:
+
+```console
+# zsh
+$ mkdir -p ~/.zsh/completions
+$ dots completion zsh > ~/.zsh/completions/_dots
+# then in ~/.zshrc, above `compinit`:
+#   fpath=(~/.zsh/completions $fpath)
+
+# bash — requires the bash-completion package
+$ mkdir -p ~/.local/share/bash-completion/completions
+$ dots completion bash > ~/.local/share/bash-completion/completions/dots
+
+# fish
+$ dots completion fish > ~/.config/fish/completions/dots.fish
+```
+
+Run `dots completion <shell> --help` for other options, including system-wide paths.
+
 ## Roadmap
 
 <details>
@@ -140,7 +165,7 @@ Get the foundation and safety right.
 Make daily use frictionless; no architectural changes.
 
 - [x] `-p` / `--print` — resolve the path without opening (scriptable)
-- [ ] Shell completion + dynamic app-name completion
+- [x] Shell completion + dynamic app-name completion
 - [ ] Better unknown-app error with did-you-mean suggestion
 - [x] `-e <editor>` one-shot override and `--dir` (open containing folder)
 - [ ] Root `Long` description + examples; minimal, `NO_COLOR`-aware styling

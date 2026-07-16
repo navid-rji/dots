@@ -12,10 +12,11 @@ import (
 )
 
 var addCmd = &cobra.Command{
-	Use:     "add <app> <path>",
-	Args:    cobra.ExactArgs(2),
-	Short:   "Add a path to an app's config",
-	Example: "  dots add nvim ~/.config/nvim",
+	Use:               "add <app> <path>",
+	Args:              cobra.ExactArgs(2),
+	ValidArgsFunction: completeAdd,
+	Short:             "Add a path to an app's config",
+	Example:           "  dots add nvim ~/.config/nvim",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// TODO: how to handle dots config
 		reg := currentRegistry(loadedConfig)

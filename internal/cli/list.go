@@ -14,9 +14,11 @@ import (
 var listCustom, listCheck bool
 
 var listCmd = &cobra.Command{
-	Use:     "list",
-	Aliases: []string{"ls"},
-	Short:   "List known apps and their config paths",
+	Use:               "list",
+	Args:              cobra.NoArgs,
+	ValidArgsFunction: cobra.NoFileCompletions,
+	Aliases:           []string{"ls"},
+	Short:             "List known apps and their config paths",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		reg := currentRegistry(loadedConfig)
 

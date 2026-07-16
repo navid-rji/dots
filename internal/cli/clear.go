@@ -11,10 +11,11 @@ import (
 )
 
 var clearCmd = &cobra.Command{
-	Use:     "clear <app>",
-	Args:    cobra.ExactArgs(1),
-	Short:   "Clear an app's custom path, reverting to its default if one exists",
-	Example: "  dots clear ghostty",
+	Use:               "clear <app>",
+	Args:              cobra.ExactArgs(1),
+	ValidArgsFunction: completeClear,
+	Short:             "Clear an app's custom path, reverting to its default if one exists",
+	Example:           "  dots clear ghostty",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// TODO: how to handle dots config update
 		name := args[0]

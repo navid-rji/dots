@@ -16,13 +16,18 @@ var rootCmd = &cobra.Command{
 	SilenceErrors: true,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		cmd.SilenceUsage = true // args/flags already validated; runtime errors past here shouldn't print usage
+		completing := isCompletionRequest(cmd)
+
 		cfg, found, err := config.Load()
 		if err != nil {
+			if completing {
+				loadedConfig = config.Config{} // degrade to default, never fail a TAB
+				return nil
+			}
 			return err
 		}
-		if !found {
-			cfg, err = firstRunSetup()
-			if err != nil {
+		if !found && !completing {
+			if cfg, err = firstRunSetup(); err != nil {
 				return err
 			}
 		}
