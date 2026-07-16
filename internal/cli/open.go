@@ -11,8 +11,10 @@ import (
 	"github.com/navid-rji/dots/internal/paths"
 )
 
-var openPrint, openDir bool
-var openEditor string
+var (
+	openPrint, openDir bool
+	openEditor         string
+)
 
 func init() {
 	rootCmd.Args = cobra.MaximumNArgs(1)
