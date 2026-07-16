@@ -8,14 +8,12 @@ import (
 	"syscall"
 
 	"github.com/google/shlex"
-
-	"github.com/navid-rji/dots/internal/config"
 )
 
 // Open launches the user's editor on the given file path.
 // On success it never returns.
-func Open(cfg config.Config, path string) error {
-	command := resolveCommand(cfg)
+func Open(path, editor string) error {
+	command := resolveCommand(editor)
 
 	parts, err := shlex.Split(command)
 	if err != nil {
@@ -37,9 +35,9 @@ func Open(cfg config.Config, path string) error {
 }
 
 // resolveCommand picks the editor command from config, then the environment.
-func resolveCommand(cfg config.Config) string {
-	if cfg.Editor != "" {
-		return cfg.Editor
+func resolveCommand(editor string) string {
+	if editor != "" {
+		return editor
 	}
 	if v := os.Getenv("VISUAL"); v != "" {
 		return v

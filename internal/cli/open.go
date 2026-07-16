@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 
@@ -10,11 +11,14 @@ import (
 	"github.com/navid-rji/dots/internal/paths"
 )
 
-var openPrint bool
+var openPrint, openDir bool
+var openEditor string
 
 func init() {
 	rootCmd.Args = cobra.MaximumNArgs(1)
 	rootCmd.Flags().BoolVarP(&openPrint, "print", "p", false, "Print the resolved path instead of opening it")
+	rootCmd.Flags().BoolVar(&openDir, "dir", false, "Open the parent directory of the resolved path instead of the file itself")
+	rootCmd.Flags().StringVarP(&openEditor, "editor", "e", "", "Override the editor to use for opening files")
 	rootCmd.RunE = func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			if openPrint {
@@ -27,32 +31,37 @@ func init() {
 }
 
 func openApp(name string) error {
-	reg := currentRegistry(loadedConfig)
-	// `dots dots` opens dots' own config -> built-in shortcut, not a registered app.
-	if name == "dots" {
-		path, err := config.Path()
-		if err != nil {
-			return err
-		}
-		return editor.Open(loadedConfig, path)
-	}
-
-	app, err := reg.Resolve(name)
+	path, err := resolvePath(name)
 	if err != nil {
 		return err
 	}
-	if len(app.Paths) == 0 {
-		return fmt.Errorf("%q has no configured paths", name)
-	}
-
-	// TODO: Handle multiple paths with an interactive picker
-	path, err := paths.Expand(app.Paths[0]) // NOTE: just the first path for now
-	if err != nil {
-		return err
+	if openDir {
+		path = filepath.Dir(path)
 	}
 	if openPrint {
 		fmt.Println(path)
 		return nil
 	}
-	return editor.Open(loadedConfig, path)
+	editor_cmd := loadedConfig.Editor
+	if openEditor != "" {
+		editor_cmd = openEditor
+	}
+	return editor.Open(path, editor_cmd)
+}
+
+func resolvePath(name string) (string, error) {
+	if name == "dots" {
+		return config.Path()
+	}
+
+	app, err := currentRegistry(loadedConfig).Resolve(name)
+	if err != nil {
+		return "", err
+	}
+	if len(app.Paths) == 0 {
+		return "", fmt.Errorf("%q has no configured paths", name)
+	}
+
+	// TODO: Handle multiple paths with an interactive picker
+	return paths.Expand(app.Paths[0]) // NOTE: just the first path for now
 }

@@ -142,9 +142,8 @@ Make daily use frictionless; no architectural changes.
 - [x] `-p` / `--print` — resolve the path without opening (scriptable)
 - [ ] Shell completion + dynamic app-name completion
 - [ ] Better unknown-app error with did-you-mean suggestion
-- [ ] `-e <editor>` one-shot override and `--dir` (open containing folder)
+- [x] `-e <editor>` one-shot override and `--dir` (open containing folder)
 - [ ] Root `Long` description + examples; minimal, `NO_COLOR`-aware styling
-- [ ] `dots doctor` — check config, editor on `PATH`, path existence
 
 </details>
 

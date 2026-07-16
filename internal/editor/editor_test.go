@@ -3,8 +3,6 @@ package editor
 import (
 	"slices"
 	"testing"
-
-	"github.com/navid-rji/dots/internal/config"
 )
 
 func TestApplyPath(t *testing.T) {
@@ -84,7 +82,7 @@ func TestResolveCommand(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Setenv("VISUAL", tt.visual)
 			t.Setenv("EDITOR", tt.editor)
-			got := resolveCommand(config.Config{Editor: tt.cfgEditor})
+			got := resolveCommand(tt.cfgEditor)
 			if got != tt.want {
 				t.Errorf("resolveCommand() = %q, want %q", got, tt.want)
 			}
