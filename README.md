@@ -237,13 +237,6 @@ Reuses comment-safe writes (appending a second path) and adds a picker primitive
 
 </details>
 
-<details>
-<summary><strong>v0.7.0+ — TUI</strong></summary>
-
-- [ ] `dots tui` — full-screen interactive browser (reuses the v0.5 picker)
-
-</details>
-
 ## Built with
 
 - [Cobra](https://github.com/spf13/cobra) — command-line framework
