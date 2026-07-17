@@ -16,6 +16,10 @@ var rootCmd = &cobra.Command{
 	Long: `dots opens an app's config file in your editor, so you don't have to
 remember whether it lives in ~/.config, ~/.local/share, or straight in $HOME.
 
+Pass an app name to open it directly, or run "dots" with no arguments to pick
+one interactively. The picker shells out to fzf (https://github.com/junegunn/fzf),
+so it needs fzf 0.61+ on your PATH; without it, bare "dots" prints this help.
+
 It ships with best-guess paths for 90+ well-known tools. Anything you register
 yourself wins over those, and use_defaults = false drops the built-ins
 entirely. dots' own config is TOML at ~/.config/dots/config.toml — "dots dots"

@@ -12,6 +12,7 @@ editor.
 $ dots nvim      # opens ~/.config/nvim/init.lua
 $ dots zsh       # opens ~/.zshrc
 $ dots git       # opens ~/.gitconfig
+$ dots           # can't remember the name? fuzzy-find it
 ```
 
 > [!NOTE]
@@ -53,6 +54,21 @@ directory is on your `PATH`.
 
 `dots` runs on **macOS and Linux**.
 
+### Optional: fzf
+
+Everything above works on its own. If you also want the [interactive
+picker](#interactive-picker), install [fzf](https://github.com/junegunn/fzf) (0.61 or
+newer) and make sure it's on your `PATH`:
+
+```console
+brew install fzf        # macOS / Homebrew
+sudo apt install fzf    # Debian / Ubuntu
+sudo pacman -S fzf      # Arch
+```
+
+Without it, every named command — `dots nvim`, `list`, `add`, and the rest — behaves
+exactly the same; only bare `dots` falls back to printing help.
+
 ## Usage
 
 The first time you run `dots`, it asks two things: which command should open your
@@ -62,6 +78,7 @@ the built-in defaults. You can change both later in the config file.
 | Command | Description |
 | --- | --- |
 | `dots <app>` | Open an app's config in your editor |
+| `dots` | Fuzzy-find an app and open it (needs [fzf](#interactive-picker)) |
 | `dots list` (`ls`) | List known apps and their config paths |
 | `dots list --check` | Also mark whether each config file exists on disk (✓/✗) |
 | `dots list --custom` | Show only the apps you registered yourself |
@@ -102,6 +119,39 @@ $ wc -l "$(dots -p git)"     # --print composes with anything
 
 `--print` writes the fully expanded absolute path, not the `~/…` form that
 `dots list` displays — that's what makes it safe to hand to other commands.
+
+### Interactive picker
+
+Run `dots` with no arguments and it opens a fuzzy-finder over every app it knows —
+built-in defaults and your own entries alike, each shown next to its config path.
+Type to narrow the list, `Enter` to open the highlighted app, `Esc` or `Ctrl-C` to
+back out without opening anything.
+
+```console
+$ dots
+╭─ search ─────────────────────────────────────╮
+│ dots > git                                   │
+╰──────────────────────────────────────────────╯
+╭─ apps ───────────────────────────────────────╮
+│ > git            ~/.gitconfig                │
+│   gitignore      ~/.config/git/ignore        │
+╰──────────────────────────────────────────────╯
+```
+
+The flags from the previous section still apply, so the picker composes with them:
+
+```console
+$ dots -p          # pick an app, print its path instead of opening it
+$ dots --dir       # pick an app, open its folder
+$ dots -e code     # pick an app, open it in VS Code just this once
+```
+
+> [!NOTE]
+> The picker shells out to [fzf](https://github.com/junegunn/fzf), which needs to be
+> installed and on your `PATH` — version 0.61 or newer. It's optional: `dots` never
+> requires it, and if fzf is missing, bare `dots` just tells you so and prints the
+> help text. Every other command works with or without it. See
+> [Optional: fzf](#optional-fzf) for install instructions.
 
 ### Example
 
@@ -198,18 +248,26 @@ Make daily use frictionless; no architectural changes.
 </details>
 
 <details>
-<summary><strong>v0.3.0 — Comment-safe writes & richer defaults</strong></summary>
+<summary><strong>v0.3.0 — Integrate `fzf`</strong></summary>
+
+Make finding an app as easy as opening one.
+
+- [x] `dots` with no args -> fuzzy-find across all apps
+
+</details>
+
+<details>
+<summary><strong>v0.4.0 — Comment-safe writes</strong></summary>
 
 Fix the write path before anything writes more, and go batteries-included.
 
 - [ ] Surgical edits in `add` / `update` / `clear` that preserve comments and formatting
-- [ ] Expanded curated default catalog, with per-OS paths
 - [ ] `dots list --json`
 
 </details>
 
 <details>
-<summary><strong>v0.4.0 — Discovery</strong></summary>
+<summary><strong>v0.5.0 — Discovery</strong></summary>
 
 Depends on search paths and the catalog to match against.
 
@@ -219,18 +277,17 @@ Depends on search paths and the catalog to match against.
 </details>
 
 <details>
-<summary><strong>v0.5.0 — Multiple configs & selection</strong></summary>
+<summary><strong>v0.6.0 — Multiple configs & selection</strong></summary>
 
 Reuses comment-safe writes (appending a second path) and adds a picker primitive.
 
 - [ ] Multiple paths per app, with a picker when more than one exists
 - [ ] `dots <app> --list` — choose among an app's configs
-- [ ] `dots` with no args (`-i` / `pick`) — fuzzy-find across all apps
 
 </details>
 
 <details>
-<summary><strong>v0.6.0 — Fetch & install</strong></summary>
+<summary><strong>v0.7.0 — Fetch & install</strong></summary>
 
 - [ ] `dots get <url> [dest]` — download a config file from a URL
 - [ ] `--as <app>` — download, register, and back up any existing file first
@@ -241,6 +298,7 @@ Reuses comment-safe writes (appending a second path) and adds a picker primitive
 
 - [Cobra](https://github.com/spf13/cobra) — command-line framework
 - [go-toml](https://github.com/pelletier/go-toml) — TOML parsing
+- [fzf](https://github.com/junegunn/fzf) — fuzzy finder behind the interactive picker (optional, not vendored)
 
 ## Contributing
 

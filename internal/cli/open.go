@@ -10,7 +10,9 @@ import (
 	"github.com/navid-rji/dots/internal/config"
 	"github.com/navid-rji/dots/internal/editor"
 	"github.com/navid-rji/dots/internal/paths"
+	"github.com/navid-rji/dots/internal/picker"
 	"github.com/navid-rji/dots/internal/registry"
+	"github.com/navid-rji/dots/internal/ui"
 )
 
 var (
@@ -29,10 +31,19 @@ func init() {
 
 	rootCmd.RunE = func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			if openPrint {
-				return fmt.Errorf("--print needs an app name")
+			if !picker.Available() {
+				s := ui.Err()
+				fmt.Fprintf(cmd.ErrOrStderr(), "%s\n\n %s\n\n", "The interactive picker needs fzf, which isn't on your PATH.", s.Render("brew install fzf", ui.Bold))
+				return cmd.Help()
 			}
-			return cmd.Help() // TODO: interactive fzf goes here
+			name, err := pickApp()
+			if errors.Is(err, picker.ErrAborted) {
+				return nil
+			}
+			if err != nil {
+				return err
+			}
+			return openApp(name)
 		}
 		return openApp(args[0])
 	}
@@ -75,4 +86,33 @@ func resolvePath(name string) (string, error) {
 
 	// TODO: Handle multiple paths with an interactive picker
 	return paths.Expand(app.Paths[0]) // NOTE: just the first path for now
+}
+
+func pickApp() (string, error) {
+	reg := currentRegistry(loadedConfig)
+
+	names := append(reg.Names(), "dots")
+	lines := make([]string, 0, len(names))
+	byLine := make(map[string]string, len(names))
+
+	for _, name := range names {
+		if isReserved(name) && name != "dots" {
+			continue
+		}
+		desc := ""
+		if name == "dots" {
+			desc = "dots' own config"
+		} else if app, err := reg.Resolve(name); err == nil && len(app.Paths) > 0 {
+			desc = app.Paths[0]
+		}
+		line := fmt.Sprintf("%-14s %s", name, desc)
+		lines = append(lines, line)
+		byLine[line] = name
+	}
+
+	line, err := picker.Pick(lines, "--style=full", "--no-multi", "--layout=reverse", "--height=~40%", "--highlight-line", "--border", "--prompt=dots > ", "--input-label= search ", "--list-label= apps ")
+	if err != nil {
+		return "", err
+	}
+	return byLine[line], nil
 }
